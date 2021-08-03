@@ -1,0 +1,12 @@
+cd ~/Documents/projects/guta_project/admin-app
+echo "# adminApp" >> README.md
+git init
+git add README.md
+git commit -m "updated"
+git branch -M main
+git remote add origin https://github.com/TechImpactHub/adminApp.git
+git push -u origin main
+
+git add .
+git commit -m "updated"
+git push
