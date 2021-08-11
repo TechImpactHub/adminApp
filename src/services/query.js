@@ -230,14 +230,12 @@ export const PARTNERS_LIST_QUERY = gql`
         node{
           partnerUuid
           nationalId
+          role
           user{
             username
             firstName
             lastName
             email
-          }
-          partnerRole{
-            role
           }
           contactSet
           {

@@ -87,7 +87,7 @@ class UsersTable extends React.Component {
                     <tr>
                       <td>{partner.node.partnerUuid}</td>
                       <td>{partner.node.user.username}</td>
-                      <td>{partner.node.partnerRole.role}</td>
+                      <td>{partner.node.role}</td>
                       
                       {/* {partner.node.person.personroleSet.edges.map(role => (
                       <td>{role.node.roleId.role}</td>
