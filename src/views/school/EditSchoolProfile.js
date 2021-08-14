@@ -25,7 +25,7 @@ const EditSchoolProfile = (props) => {
     console.log(props.location.query.school)
 
     const [formState, setFormState] = useState({
-      loggedInUser : 'admin@gutaapp.com',
+      partnerUuid : "728352dd-dc06-4d84-b60b-62fdc89348fd",
       name: props.location.query.school.node.name,
       schoolUuid: props.location.query.school.node.schoolUuid,
       category: props.location.query.school.node.category.category,
@@ -36,7 +36,7 @@ const EditSchoolProfile = (props) => {
       variables: {
         name: formState.name,
         schoolUuid: formState.schoolUuid,
-        email: formState.loggedInUser,
+        partnerUuid: formState.partnerUuid,
         category: formState.category,
       }, 
       client: client,

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useMutation } from '@apollo/client';
 import {client} from '../../gql-config';
-import {SIGNUP_MUTATION} from '../../services/mutations';
+import {EDIT_PARTNER} from '../../services/mutations';
 import { AUTH_TOKEN } from '../../constants';
 
 // reactstrap components
@@ -25,49 +25,40 @@ const EditUserProfile = (props) => {
     if (props.location.query == null) {
         history.push('/');
     }
+    console.log('props.location.query')
+    // console.log(props.location)
+    const partner = props.location.query.vendor.node.partner
+    const phone = props.location.query.contact.node.phone
     
-    const partner = props.location.query.partner.node
-    const contact = props.location.query.contactData.node
-    console.log(partner.user.username)
-    console.log(contact)
-    console.log(partner.partnerUuid)
+     console.log('phone')
+     console.log(phone)
+    //  console.log(partner.nationalId)
+     console.log('partner')
+     console.log(partner)
 
-    // console.log(partner.user.partner.contactSet.edges);
-
-    
 
     const [formState, setFormState] = useState({
+      partnerUuid: partner.partnerUuid,
       nationalId: partner.nationalId,
-      email: partner.user.email,
-      password: partner.user.password,
-      username: partner.user.username,
+      phone: phone,
       firstName: partner.user.firstName,
       lastName: partner.user.lastName,
-      role: partner.partnerRole.role,
-      neighborhood: contact.neighborhood,
-      city: contact.city,
-      street: contact.street,
-      phone: contact.phone,
     
     });
-    const [editpartner] = useMutation(SIGNUP_MUTATION, {
+    
+
+    const [editpartner] = useMutation(EDIT_PARTNER, {
       variables: {
-        username: formState.username,
-        email: formState.email,
-        password: formState.password,
+        partnerUuid: partner.partnerUuid,
+        nationalId: formState.nationalId,
+        phone: formState.phone,
         firstName: formState.firstName,
         lastName: formState.lastName,
-        neighborhood: formState.neighborhood,
-        city: formState.city,
-        street: formState.street,
-        phone: formState.phone,
-        role: formState.role,
       }, 
       client: client,
       onCompleted: (user) => {
         console.log(user);
-        localStorage.setItem(AUTH_TOKEN, user);
-        history.push('/admin/partners');
+        history.push('/admin/vendors');
       }
     });
     
@@ -85,96 +76,41 @@ const EditUserProfile = (props) => {
                       <Form>
                         <Row>
 
-                          <Col className="px-md-1" md="4">
+                          <Col className="px-md-1" md="6">
                             <FormGroup>
-                              <label>Username</label>
+                              <label>National ID</label>
                               <Input
-                                        value={formState.username}
+                                        value={formState.nationalId}
                                         onChange={(e) =>
                                           setFormState({
                                             ...formState,
-                                            username: e.target.value
+                                            nationalId: e.target.value
                                           })
                                         }
-                                placeholder="Username"
+                                placeholder="National ID"
                                 type="text"
                               />
                             </FormGroup>
                           </Col>
-                          <Col className="pl-md-1" md="4">
+                          <Col className="pl-md-1" md="6">
                             <FormGroup>
                               <label htmlFor="exampleInputEmail1">
-                                Email address
+                                Phone
                               </label>
                               <Input
-                                       value={formState.email}
+                                       value={formState.phone}
                                        onChange={(e) =>
                                          setFormState({
                                            ...formState,
-                                           email: e.target.value
+                                           phone: e.target.value
                                          })
                                        } 
-                              placeholder="mike@email.com" type="email" />
+                              placeholder="777777777" type="phone" />
                             </FormGroup>
                           </Col>
                           <Col className="px-md-1" md="4">
-                        <FormGroup>
-                            <label>Password</label>
-                            <Input
-                                    value={formState.password}
-                                    onChange={(e) =>
-                                        setFormState({
-                                        ...formState,
-                                        password: e.target.value
-                                        })
-                                    }
-                            placeholder="Password"
-                            type="password"
-                            />
-                        </FormGroup>
                         </Col>
                         </Row> 
-                        <Row>
-                        {        
-    partner.contactSet.edges.map(contactData => 
-                            <Col className="pr-md-1" md="4">
-                            <FormGroup>
-                              <label>Phone</label>
-                              <Input
-                                        value={formState.phone}
-                                        placeholder={contactData.phone}
-                                        onChange={(e) =>
-                                          setFormState({
-                                
-                                            ...formState,
-                                            phone: e.target.value
-                                          })
-                                        }
-                                type="text"
-                              />
-                            </FormGroup>
-                            </Col>
-                            )
-                            }               
-                            <Col className="pr-md-1" md="8">
-                            <FormGroup>
-        <label htmlFor="user_role">Select</label>
-        <Input className="pr-md-1"
-                value={formState.role}
-                onChange={(e) =>
-                    setFormState({
-                    ...formState,
-                    role: e.target.value
-                    })
-                }
-        type="select" name="userrole" id="user_role">
-          <option value="student">Student</option>
-          <option value="parent">Parent</option>
-          <option value="vendor">Vendor</option>
-        </Input>
-      </FormGroup>
-                            </Col>
-                            </Row> 
 
                         <Row>
                           <Col className="pr-md-1" md="6">
@@ -209,72 +145,7 @@ const EditUserProfile = (props) => {
                               />
                             </FormGroup>
                           </Col>
-                        </Row>
-
-{        
-    partner.contactSet.edges.map(contactData => 
-
-                        <Row>
-                          <Col md="12">
-                            <FormGroup>
-                              <label>Street Address</label>
-                              <Input
-                                        value={formState.street}
-                                        placeholder={contactData.street}
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            street: e.target.value
-                                          })
-                                        }
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-    )
-}
-{        
-    partner.contactSet.edges.map(contactData => 
-
-                        <Row>
-                          <Col className="pr-md-1" md="6">
-                            <FormGroup>
-                              <label>Neighborhood</label>
-                              <Input
-                                        value={formState.neighborhood}
-                                        placeholder={contactData.neighborhood}
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            neighborhood: e.target.value
-                                          })
-                                        }
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col className="px-md-1" md="6">
-                            <FormGroup>
-                              <label>City</label>
-                              <Input
-                                        value={formState.city}
-                                        placeholder={contactData.city}
-
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            city: e.target.value
-                                          })
-                                        }
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-          
-                        </Row>
-                        )
-}
+                           </Row>
                       </Form>
                     </CardBody>
                     <CardFooter>
@@ -301,14 +172,12 @@ const EditUserProfile = (props) => {
                             className="avatar"
                             src={require("assets/img/emilyz.jpg").default}
                           />
-                          <h5 className="title">Mike Andrew</h5>
+                          <h5 className="title">{formState.firstName} {formState.lastName}</h5>
                         </a>
-                        <p className="description">Ceo/Co-Founder</p>
+                        <p className="description">{formState.role}</p>
                       </div>
                       <div className="card-description">
-                        Do not be scared of the truth because we need to restart the
-                        human foundation in truth And I love you like Kanye loves
-                        Kanye I love Rick Owens’ bed design but the back is...
+                            {formState.partnerUuid}
                       </div>
                     </CardBody>
                     <CardFooter>

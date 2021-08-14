@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useMutation, useQuery } from '@apollo/client';
 import {client} from '../../gql-config';
-import {GET_PARTNER_MUTATION} from '../../services/mutations';
+import {GET_PARTNER_BY_PHONE_MUTATION} from '../../services/mutations';
+import { Link } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -21,7 +22,7 @@ import {
 const AddsalesPersonProfile = () => {
     const history = useHistory();
     // set form state
-    
+  const [phoneNumber, setPhoneNumber] = useState('');
     
     const [formState, setFormState] = useState({
     partnerResults : false,
@@ -43,47 +44,38 @@ const AddsalesPersonProfile = () => {
 
     });
     // 
+    const {data} = useQuery(GET_PARTNER_BY_PHONE_MUTATION, {
+        variables: {
+          phone: formState.phone,
+        },
+        client,
+        requestPolicy: 'cache-first',
+        onCompleted: getPartner => {
+          console.log('getPartner');
+          if (getPartner.partnerByPhone === null) {
 
-    const {loading, error, data} = useQuery(GET_PARTNER_MUTATION, {
-      variables: {
-        phone: formState.phone,
-      }, 
-      client: client,
-      onCompleted: (partner) => {
-        console.log(partner.partnerByPhone.partner);
-        let loaded_partner = partner.partnerByPhone.partner
-        if (loaded_partner !== null) {
-            let s_person = loaded_partner.salespersonSet.edges;
-            console.log(loaded_partner)
-            if (s_person.length === 0) {
-                history.push('/admin/add-salesperson-business', partner)
-            }
-            else {
-                s_person.map(person => 
-                    setFormState({
-                        ...formState,
-                        personExists: true,
-                        person: person,
-                        username: loaded_partner.user.username,
-                        firstName: loaded_partner.user.firstName,
-                        lastName: loaded_partner.user.lastName,
-                        email: loaded_partner.user.email,
-                        role: loaded_partner.partnerRole.role,
+            console.log(formState.phone);
+            console.log('(', formState.phone.length, ')');
+            setFormState({
+                ...formState,
+                personExists: false,
+              })
+            console.log('No Partner exist');
+          } else {
+            console.log('Partner exist');
+            console.log(getPartner.partnerByPhone );
+            setFormState({
+                ...formState,
+                personExists: true,
+                partner: getPartner.partnerByPhone.partner,
+                firstName: getPartner.partnerByPhone.partner.user.firstName,
+                lastName: getPartner.partnerByPhone.partner.user.lastName,
+                role: getPartner.partnerByPhone.partner.role
+              })
+          }
+        },
+      });
 
-                        })
-                    )
-
-            }
-            
-        } 
-        // else {
-        //     setFormState({
-        //         ...formState,
-        //         partnerResults: true,
-        //         })
-        // }
-      }
-    });
     console.log(formState)
         return (
             <>
@@ -116,23 +108,9 @@ const AddsalesPersonProfile = () => {
 
                             </Col>
                             
-                            </Row> 
-                            {formState.partnerResults ? <p>Student of ID {formState.nationalId} not found</p> : (
-                                <></>
-                            )}
-                            {formState.personExists ? <p>Student of ID {formState.nationalId} exists</p> : (
-                                <></>
-                            )}
-                       
+                            </Row>                        
                       </Form>
                     </CardBody>
-                    <CardFooter>
-                      <Button 
-                      
-                      className="btn-fill" color="primary" >
-                        Search
-                      </Button>
-                    </CardFooter>
                   </Card>
                 </Col>
                 {formState.personExists ? (
@@ -163,15 +141,18 @@ const AddsalesPersonProfile = () => {
                       </CardBody>
                       <CardFooter>
                         <div className="button-container">
-                          <Button className="btn-icon btn-round" color="facebook">
-                            <i className="fab fa-facebook" />
-                          </Button>
-                          <Button className="btn-icon btn-round" color="twitter">
-                            <i className="fab fa-twitter" />
-                          </Button>
-                          <Button className="btn-icon btn-round" color="google">
-                            <i className="fab fa-google-plus" />
-                          </Button>
+                            {formState.role === 'student' ? (             
+                                <p>This is a Student,  cannot be a salesperson</p>
+                                       ) : (
+                                        <Link to={{pathname: `/admin/add-store/`,
+                                        query: {
+                                            partner: formState.partner,
+            
+                                          } 
+                                      }}>Assign Store</Link>
+                      )
+
+                }
                         </div>
                       </CardFooter>
                     </Card>

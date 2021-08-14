@@ -71,8 +71,9 @@ class UsersTable extends React.Component {
                 <Table className="tablesorter" responsive>
                   <thead className="text-primary">
                     <tr>
-                      <th>ID</th>
-                      <th>Username</th>
+                      {/* <th>ID</th> */}
+                      <th>First Name</th>
+                      <th>Last Name</th>
                       <th>Role</th>
                       <th className="text-center">Wallet Balance</th>
                       <th className="text-center">more</th>
@@ -85,8 +86,9 @@ class UsersTable extends React.Component {
                     (
 
                     <tr>
-                      <td>{partner.node.partnerUuid}</td>
-                      <td>{partner.node.user.username}</td>
+                      {/* <td>{partner.node.partnerUuid}</td> */}
+                      <td>{partner.node.user.firstName}</td>
+                      <td>{partner.node.user.lastName}</td>
                       <td>{partner.node.role}</td>
                       
                       {/* {partner.node.person.personroleSet.edges.map(role => (

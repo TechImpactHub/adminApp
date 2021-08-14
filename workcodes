@@ -243,3 +243,7 @@ export default AddUserProfile;
                             }
                         }
                     }
+
+        neighborhood: formState.neighborhood,
+        city: formState.city,
+        street: formState.street,

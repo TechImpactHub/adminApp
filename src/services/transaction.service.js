@@ -6,7 +6,7 @@ import {
         BUSINESS_TAGS_LIST_QUERY, 
         PARTNERS_LIST_QUERY, 
         STORES_LIST_QUERY,
-        STUDENTS_LIST_QUERY 
+        GET_STUDENTS 
         } from './query';
 import {client} from '../gql-config';
 
@@ -29,7 +29,7 @@ class TransactionDataService {
     getAllStudents() {
         const getAllStudents = client
         .query({
-          query: STUDENTS_LIST_QUERY,
+          query: GET_STUDENTS,
         });
         return getAllStudents;
     } 

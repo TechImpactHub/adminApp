@@ -19,7 +19,7 @@ import {
   Row,
   Col,
 } from "reactstrap";
-
+import { Link } from "react-router-dom";
 import { useQuery } from '@apollo/client';
 const AddStudentSchool = (props) => {
     console.log(props);
@@ -53,7 +53,7 @@ const AddStudentSchool = (props) => {
             client:client,
             onCompleted: (recieved_schools) => {
               console.log(recieved_schools);
-              const partner = props.location.state.getPartner.partner;
+              const partner = props.location.query.partner.node.partner;
               console.log(partner);
               partner.contactSet.edges.map(contact => 
                 setFormState({
@@ -67,7 +67,7 @@ const AddStudentSchool = (props) => {
                     firstName: partner.user.firstName,
                     lastName: partner.user.lastName,
                     email: partner.user.email,
-                    role: partner.partnerRole.role,
+                    role: partner.role,
                     city: contact.node.city,
                     neighborhood: contact.node.neighborhood,
                     street: contact.node.street,
@@ -75,7 +75,12 @@ const AddStudentSchool = (props) => {
                     })
               )
             }})
-            
+        const estyles = {
+            addButton : {
+                margin: "3px"
+
+            }
+        }
     const [addStudent] = useMutation(ADD_STUDENT_MUTATION, {
       variables: {
         nationalId: formState.nationalId,
@@ -87,6 +92,8 @@ const AddStudentSchool = (props) => {
         history.push('students');
       }
     });
+
+
     
     console.log(formState)
     console.log(addStudent)
@@ -109,7 +116,7 @@ const AddStudentSchool = (props) => {
                             <FormGroup>
                               <label>Partner</label>
                               <Input disabled={true}
-                                        value={formState.email}
+                                        value={formState.lastName}
                                         onChange={(e) =>
                                             setFormState({
                                             ...formState,
@@ -122,8 +129,16 @@ const AddStudentSchool = (props) => {
                             </FormGroup>
                             </Col>
                             {formState.isFetching ? <p>Loading Schools ...</p> : (
-                                                            <Col className="pr-md-1" md="4">                  
+                                                            <Col className="pr-md-1" md="4">    
+                            {formState.schools.allSchools.edges.length === 0 ? (
+                    <Link to="/admin/add-school-profile">
+                    <Button style={estyles.addButton}  className="btn-fill" color="secondary">
+                              Add School
+                    </Button>
+                    </Link>
+                            ) : (
                                                             <FormGroup>
+                                                        
                                         <label htmlFor="school">Select School</label>
                                         <Input className="pr-md-1"
                                                 value={formState.schoolUuid}
@@ -142,6 +157,7 @@ const AddStudentSchool = (props) => {
                                         </Input>
                                         
                                       </FormGroup>
+                                      )}
                                         </Col>
                             )}
 

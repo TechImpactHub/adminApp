@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useMutation } from '@apollo/client';
 import {client} from '../../gql-config';
-import {SIGNUP_MUTATION} from '../../services/mutations';
+import {CREATE_USER} from '../../services/mutations';
 import { AUTH_TOKEN } from '../../constants';
 
 // reactstrap components
@@ -23,31 +23,19 @@ import {
 const AddUserProfile = () => {
     const history = useHistory();
     const [formState, setFormState] = useState({
-      email: '',
       nationalId: '',
-      pushToken: '',
-      username: '',
       firstName: '',
       lastName: '',
-      neighborhood: '',
       role: '',
-      city: '',
-      street: '',
       phone: '',
     });
        
   
-    const [signup] = useMutation(SIGNUP_MUTATION, {
+    const [signup] = useMutation(CREATE_USER, {
       variables: {
-        username: formState.username,
-        email: formState.email,
         nationalId: formState.nationalId,
-        pushToken: formState.pushToken,
         firstName: formState.firstName,
         lastName: formState.lastName,
-        neighborhood: formState.neighborhood,
-        city: formState.city,
-        street: formState.street,
         phone: formState.phone,
         role: formState.role,
       }, 
@@ -70,58 +58,7 @@ const AddUserProfile = () => {
                       <h5 className="title">Create Profile</h5>
                     </CardHeader>
                     <CardBody>
-                      <Form>
-                        <Row>
-
-                          <Col className="px-md-1" md="4">
-                            <FormGroup>
-                              <label>Username</label>
-                              <Input
-                                        value={formState.username}
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            username: e.target.value
-                                          })
-                                        }
-                                placeholder="Username"
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col className="pl-md-1" md="4">
-                            <FormGroup>
-                              <label htmlFor="exampleInputEmail1">
-                                Email address
-                              </label>
-                              <Input
-                                       value={formState.email}
-                                       onChange={(e) =>
-                                         setFormState({
-                                           ...formState,
-                                           email: e.target.value
-                                         })
-                                       } 
-                              placeholder="mike@email.com" type="email" />
-                            </FormGroup>
-                          </Col>
-                          <Col className="px-md-1" md="4">
-                        <FormGroup>
-                            <label>PIN</label>
-                            <Input
-                                    value={formState.pushToken}
-                                    onChange={(e) =>
-                                        setFormState({
-                                        ...formState,
-                                        pushToken: e.target.value
-                                        })
-                                    }
-                            placeholder="Password"
-                            type="password"
-                            />
-                        </FormGroup>
-                        </Col>
-                        </Row>      
+                      <Form>    
                         <Row>
                         <Col className="pr-md-1" md="4">
                             <FormGroup>
@@ -207,59 +144,6 @@ const AddUserProfile = () => {
                               />
                             </FormGroup>
                           </Col>
-                        </Row>
-                        <Row>
-                          <Col md="12">
-                            <FormGroup>
-                              <label>Street Address</label>
-                              <Input
-                                        value={formState.street}
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            street: e.target.value
-                                          })
-                                        }
-                                placeholder="Home Address"
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                        </Row>
-                        <Row>
-                          <Col className="pr-md-1" md="6">
-                            <FormGroup>
-                              <label>Neighborhood</label>
-                              <Input
-                                        value={formState.neighborhood}
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            neighborhood: e.target.value
-                                          })
-                                        }
-                                placeholder="Neighborhood"
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-                          <Col className="px-md-1" md="6">
-                            <FormGroup>
-                              <label>City</label>
-                              <Input
-                                        value={formState.city}
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            city: e.target.value
-                                          })
-                                        }
-                                placeholder="City"
-                                type="text"
-                              />
-                            </FormGroup>
-                          </Col>
-          
                         </Row>
                       </Form>
                     </CardBody>

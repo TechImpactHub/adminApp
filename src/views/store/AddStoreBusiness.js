@@ -20,7 +20,7 @@ import {
 } from "reactstrap";
 
 const AddStoreBusiness = (props) => {
-    console.log(props);
+    console.log(props.location);
     // let sales_person = props.location.state.partner
     // console.log(sales_person.nationalId)
 

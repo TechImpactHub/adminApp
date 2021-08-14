@@ -16,6 +16,8 @@ import TransactionDataService from "../../services/transaction.service";
 import { 
      withStyles } from "@material-ui/core";
 import { styles } from "../styles"
+import {client} from '../../gql-config';
+import {GET_SALESPERSONS} from '../../services/query';
 
 class salesPersonList extends React.Component {
     constructor(props) {
@@ -32,8 +34,12 @@ class salesPersonList extends React.Component {
 
 // call the the query from service
     getsalesPersons() {
-        TransactionDataService.getAllSalesPersons()
+        client
+        .query({
+            query: GET_SALESPERSONS
+        })
           .then(result => {
+
             //   pass the query data into component state
               this.setState({
                   salesPersons : result.data.allSalesperson.edges
@@ -42,6 +48,7 @@ class salesPersonList extends React.Component {
     }
     render() {
         // const {classes} = this.props
+        console.log('this.state.salesPersons')
         console.log(this.state.salesPersons)
         const estyles = {
             addButton : {

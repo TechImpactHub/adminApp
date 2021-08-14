@@ -29,13 +29,14 @@ const AddSchoolProfile = (props) => {
       name: '',
       category: '',
       schoolUuid: '',
+      partnerUuid: "728352dd-dc06-4d84-b60b-62fdc89348fd",
 
     });
     
     const [signup] = useMutation(ADD_SCHOOL_MUTATION, {
       variables: {
         name: formState.name,
-        email: formState.loggedInUser,
+        partnerUuid: formState.partnerUuid,
         category: formState.category,
         schoolUuid: formState.schoolUuid,
       }, 
