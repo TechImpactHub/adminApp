@@ -2,40 +2,24 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import { useMutation } from '@apollo/client';
 import {client} from '../../gql-config';
-import {LOGIN_MUTATION,  SIGNUP_MUTATION} from '../../services/query';
+import {LOGIN} from '../../services/query';
 import { AUTH_TOKEN } from '../../constants';
 const Login = () => {
   const history = useHistory();
   const [formState, setFormState] = useState({
     login: true,
-    email: '',
-    password: '',
-    username: ''
+    phone: '',
+    pushToken: '',
   });
-  const [login] = useMutation(LOGIN_MUTATION, {
+  const [login] = useMutation(LOGIN, {
     variables: {
-      email: formState.email,
-      password: formState.password
+      phone: formState.phone,
+      pushToken: formState.pushToken
     },
     client: client,
     onCompleted: ({ login }) => {
         console.log(login)
-      localStorage.setItem(AUTH_TOKEN, login.email);
-      history.push('/');
-    }
-  });
-
-  
-  const [signup] = useMutation(SIGNUP_MUTATION, {
-    variables: {
-      username: formState.username,
-      email: formState.email,
-      password: formState.password
-    },
-    client: client,
-    onCompleted: ({ signup }) => {
-        console.log(signup);
-      localStorage.setItem(AUTH_TOKEN, signup);
+      localStorage.setItem(AUTH_TOKEN, login.phone);
       history.push('/');
     }
   });
@@ -61,32 +45,32 @@ const Login = () => {
           />
         )}
         <input
-          value={formState.email}
+          value={formState.phone}
           onChange={(e) =>
             setFormState({
               ...formState,
-              email: e.target.value
+              phone: e.target.value
             })
           }
           type="text"
-          placeholder="Your email address"
+          placeholder="Your phone address"
         />
         <input
-          value={formState.password}
+          value={formState.pushToken}
           onChange={(e) =>
             setFormState({
               ...formState,
-              password: e.target.value
+              pushToken: e.target.value
             })
           }
-          type="password"
-          placeholder="Choose a safe password"
+          type="pushToken"
+          placeholder="Choose a safe pushToken"
         />
       </div>
       <div className="flex mt3">
         <button
           className="pointer mr2 button"
-          onClick={formState.login ? login : signup}
+          onClick={login}
         >
           {formState.login ? 'login' : 'create account'}
         </button>

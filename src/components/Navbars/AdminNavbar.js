@@ -1,6 +1,7 @@
 import React from "react";
 // nodejs library that concatenates classes
 import classNames from "classnames";
+import { useHistory } from 'react-router';
 
 // reactstrap components
 import {
@@ -26,6 +27,8 @@ function AdminNavbar(props) {
   const [collapseOpen, setcollapseOpen] = React.useState(false);
   const [modalSearch, setmodalSearch] = React.useState(false);
   const [color, setcolor] = React.useState("navbar-transparent");
+  const history = useHistory();
+
   React.useEffect(() => {
     window.addEventListener("resize", updateColor);
     // Specify how to clean up after this effect:
@@ -54,6 +57,10 @@ function AdminNavbar(props) {
   const toggleModalSearch = () => {
     setmodalSearch(!modalSearch);
   };
+  const logout = () => {
+      
+      history.push('login')
+  }
   return (
     <>
       <Navbar className={classNames("navbar-absolute", color)} expand="lg">
@@ -150,7 +157,7 @@ function AdminNavbar(props) {
                     <DropdownItem className="nav-item">Settings</DropdownItem>
                   </NavLink>
                   <DropdownItem divider tag="li" />
-                  <NavLink tag="li">
+                  <NavLink onClick={logout} tag="li">
                     <DropdownItem className="nav-item">Log out</DropdownItem>
                   </NavLink>
                 </DropdownMenu>

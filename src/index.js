@@ -9,21 +9,38 @@ import "assets/scss/black-dashboard-react.scss";
 import "assets/demo/demo.css";
 import "assets/css/nucleo-icons.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import userReducer from './store/reducers/user';
 
 import ThemeContextWrapper from "./components/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/BackgroundColorWrapper/BackgroundColorWrapper";
+import { Provider } from 'react-redux'
+import appConfigReducer from './store/reducers/appConfig';
+
+import {combineReducers, createStore} from 'redux';
+
+const rootReducer = combineReducers({
+    appConfig: appConfigReducer,
+    user: userReducer,
+
+  });
+  
+  const store = createStore(rootReducer);
+  
 
 ReactDOM.render(
+    
   <ThemeContextWrapper>
+    <Provider store={store}>
     <BackgroundColorWrapper>
       <BrowserRouter>
         <Switch>
           <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
           <Route path="/rtl" render={(props) => <RTLLayout {...props} />} />
-          <Redirect from="/" to="/admin/dashboard" />
+          <Redirect from="/" to="/admin/login" />
         </Switch>
       </BrowserRouter>
     </BackgroundColorWrapper>
+    </Provider>
   </ThemeContextWrapper>,
   document.getElementById("root")
 );

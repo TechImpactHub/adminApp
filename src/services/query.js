@@ -4,6 +4,17 @@ import gql from 'graphql-tag';
 // our first query will requests all movies
 // with only given fields
 // note the usage of gql with jsvascript string literal
+export const LOGIN = gql`
+query($phone:String! $pushToken: String!)
+{
+  login(phone:$phone, pushToken:$pushToken)
+  {
+    user{
+      firstName
+    }
+  }
+}
+`
 export const GET_SALESPERSONS = gql`
 query
 {

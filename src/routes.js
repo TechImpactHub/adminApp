@@ -1,6 +1,7 @@
 import Dashboard from "views/Dashboard.js";
 import TableList from "views/TableList.js";
 import TransactionsList from "views/Transactions.js";
+import Login from "views/login/Login.js";
 
 import AddUserProfile from "views/partner/AddUserProfile.js";
 import EditUserProfile from "views/partner/EditUserProfile.js";
@@ -42,6 +43,14 @@ var routes = [
     icon: "tim-icons icon-chart-pie-36",
     component: Dashboard,
     layout: "/admin",
+  },
+  {
+    path: "/login",
+    name: "Login",
+    icon: "tim-icons icon-chart-pie-36",
+    component: Login,
+    layout: "/admin",
+    dash: false,
   },
 //   partners/ users routes
   {

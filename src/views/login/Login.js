@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery} from '@apollo/client';
 import {client} from '../../gql-config';
-import {ADD_SCHOOL_MUTATION} from '../../services/mutations';
+import {LOGIN} from '../../services/query';
+import { AUTH_TOKEN } from '../../constants';
 
 // reactstrap components
 import {
@@ -19,97 +20,44 @@ import {
   Col,
 } from "reactstrap";
 
-const AddSchoolProfile = (props) => {
-    
+const Login = () => {
     const history = useHistory();
-
-
     const [formState, setFormState] = useState({
-      loggedInUser : 'admin@gutaapp.com',
-      name: '',
-      category: '',
-      schoolUuid: '',
-      partnerUuid: "728352dd-dc06-4d84-b60b-62fdc89348fd",
+      pushToken: '',
+      phone: '',
+    });
+       
+  const login = () => {
+      client.query({
+          query: LOGIN,
+          variables: {
+            pushToken: formState.pushToken,
+            phone: formState.phone,
+          }
+      }).then(result => {
+          console.log(result)
+          history.push('dashboard');
+      })
+  }
 
-    });
-    
-    const [signup] = useMutation(ADD_SCHOOL_MUTATION, {
-      variables: {
-        name: formState.name,
-        partnerUuid: formState.partnerUuid,
-        category: formState.category,
-        schoolUuid: formState.schoolUuid,
-      }, 
-      client: client,
-      onCompleted: (school) => {
-        console.log(school);
-        history.push('schools');
-      }
-    });
     console.log(formState)
-    console.log(signup)
+    console.log(login)
         return (
             <>
             <div className="content">
               <Row>
-                <Col md="8">
+                <Col md="12">
                   <Card>
                     <CardHeader>
-                      <h5 className="title">Add School</h5>
+                      
                     </CardHeader>
                     <CardBody>
-                      <Form>
-    
                         <Row>
-                            <Col className="pr-md-1" md="8">
-                            <FormGroup>
-                              <label>Name</label>
-                              <Input
-                                        value={formState.name}
-                                        onChange={(e) =>
-                                          setFormState({
-                                            ...formState,
-                                            name: e.target.value
-                                          })
-                                        }
-                                placeholder="school name"
-                                type="text"
-                              />
-                            </FormGroup>
+                        <Col className="pr-md-1" md="4">
+                          
                             </Col>
                             <Col className="pr-md-1" md="4">
-                            <FormGroup>
-        <label htmlFor="category">Select Category</label>
-        <Input className="pr-md-1"
-                value={formState.category}
-                onChange={(e) =>
-                    setFormState({
-                    ...formState,
-                    category: e.target.value
-                    })
-                }
-        type="select" name="category" id="category">
-          <option value="ecd">ECD</option>
-          <option value="primary">PRIMARY</option>
-          <option value="high">HIGH SCHOOL</option>
-        </Input>
-      </FormGroup>
-                            </Col>
-                            </Row> 
-                       
-                      </Form>
-                    </CardBody>
-                    <CardFooter>
-                      <Button 
-                      onClick={signup}
-                      className="btn-fill" color="primary" >
-                        Save
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                </Col>
-                <Col md="4">
-                  <Card className="card-user">
+                            <Card className="card-user">
                     <CardBody>
                       <CardText />
                       <div className="author">
@@ -166,18 +114,19 @@ const AddSchoolProfile = (props) => {
                       </Form>
                     </CardBody>
                     <CardFooter>
-                      <div className="button-container">
-                        <Button className="btn-icon btn-round" color="facebook">
-                          <i className="fab fa-facebook" />
-                        </Button>
-                        <Button className="btn-icon btn-round" color="twitter">
-                          <i className="fab fa-twitter" />
-                        </Button>
-                        <Button className="btn-icon btn-round" color="google">
-                          <i className="fab fa-google-plus" />
-                        </Button>
-                      </div>
+                    <Button 
+                      onClick={login}
+                      className="btn-fill" color="primary" >
+                        Login
+                      </Button>
                     </CardFooter>
+                  </Card>
+                            </Col>
+                            <Col className="pr-md-1" md="4">
+              
+                            </Col>
+                        </Row>
+                    </CardBody>
                   </Card>
                 </Col>
               </Row>
@@ -186,4 +135,4 @@ const AddSchoolProfile = (props) => {
         )
     }
 
-export default AddSchoolProfile;
+export default Login;
