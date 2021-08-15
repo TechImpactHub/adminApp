@@ -35,7 +35,7 @@
         "compile-scss": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css",
         "minify-scss": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.min.css --output-style compressed",
         "map-scss": "node-sass --importer node_modules/node-sass-package-importer/dist/cli.js src/assets/scss/black-dashboard-react.scss src/assets/css/black-dashboard-react.css --source-map true",
-        "deploy-production": "react-scripts build && scp -r ./build/* inno@75.119.154.13:/home/inno/guta_project/GutaFrontend"
+        "deploy-production": "react-scripts build && scp -r ./build/* root@75.119.154.13:/root/guta_project/GutaAdmin/adminApp"
     },
     "eslintConfig": {
         "extends": "react-app"
